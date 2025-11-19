@@ -1,0 +1,163 @@
+﻿using Locadora.Models;
+using Microsoft.Data.SqlClient;
+using System.Net.WebSockets;
+using Utils.Databases;
+
+namespace Locadora.Controller
+{
+    public class ClienteController
+    {
+        public void AdicionarCliente(Cliente cliente)
+        {
+            var connection = new SqlConnection(ConnectionDB.GetConnectionString());
+            connection.Open();
+            using (SqlTransaction transaction = connection.BeginTransaction())
+            {
+                try
+                {
+                    var command = new SqlCommand(Cliente.INSERTCLIENTE, connection, transaction);
+
+                    command.Parameters.AddWithValue("@Nome", cliente.Nome);
+                    command.Parameters.AddWithValue("@Email", cliente.Email);
+                    command.Parameters.AddWithValue("@Telefone", cliente.Telefone ?? (object)DBNull.Value);
+
+                    int clienteId = Convert.ToInt32(command.ExecuteScalar());
+                    cliente.SetClienteID(clienteId);
+
+                    transaction.Commit();
+                }
+                catch (SqlException ex)
+                {
+
+                    transaction.Rollback();
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+
+        public Cliente BuscarClientePorEmail(string email)
+        {
+            SqlConnection connection = new SqlConnection(ConnectionDB.GetConnectionString());
+            connection.Open();
+
+            try
+            {
+
+                SqlCommand command = new SqlCommand(Cliente.SELECTCLIENTEPOREMAIL, connection);
+                command.Parameters.AddWithValue("@Email", email);
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+
+                    var cliente = new Cliente(reader["Nome"].ToString(),
+                                              reader["Email"].ToString(),
+                                              reader["Telefone"] != DBNull.Value ?
+                                              reader["Telefone"].ToString() : null);
+                    cliente.SetClienteID((int)reader["ClienteID"]);
+                    return cliente;
+                }
+
+
+                return null;
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Erro ao buscar cliente:" + ex.Message);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Erro inesperado ao buscar cliente:" + e.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+
+        public List<Cliente> ListarTodosClientes()
+        {
+            var connection = new SqlConnection(ConnectionDB.GetConnectionString());
+            try
+            {
+
+                connection.Open();
+
+                var command = new SqlCommand(Cliente.SELECTTODOSCLIENTES, connection);
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                List<Cliente> clientes = [];
+
+                while (reader.Read())
+                {
+                    Cliente cliente = new Cliente(
+                        reader["Nome"].ToString(),
+                        reader["Email"].ToString(),
+                        reader["Telefone"] != DBNull.Value ?
+                        reader["Telefone"].ToString() : null);
+
+                    cliente.SetClienteID((int)reader["ClienteID"]);
+
+                    clientes.Add(cliente);
+                }
+
+                return clientes;
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Erro ao listar clientes: " + ex.Message);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Erro inesperado ao listar clientes:" + e.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+        }
+
+
+
+        public void AtualizarTelefoneCliente(string telefone, string email)
+        {
+            var clienteEncontrado = this.BuscarClientePorEmail(email);
+
+            if (clienteEncontrado is null)
+            {
+                throw new Exception("Cliente não encontrado.");
+            }
+
+            SqlConnection connection = new SqlConnection(ConnectionDB.GetConnectionString());
+            connection.Open();
+
+            try
+            {
+                SqlCommand command = new SqlCommand(Cliente.UPDATETELEFONECLIENTE, connection);
+                command.Parameters.AddWithValue("@Telefone", telefone);
+                command.Parameters.AddWithValue("@IdCliente", clienteEncontrado.ClienteID);
+                command.ExecuteNonQuery();
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Erro ao atualizar telefone do cliente: " + ex.Message);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Erro inesperado ao atualizar telefone do cliente: " + e.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+    }
+}
