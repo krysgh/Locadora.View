@@ -18,22 +18,9 @@ Documento documento = new Documento ("RG","123456789", new DateTime(2020,11,20),
 
 var clienteController = new ClienteController();
 DocumentoController documentoController = new DocumentoController();
+/*
 
-try
-{
-    var TodosClientes = clienteController.ListarTodosClientes();
-
-    Console.WriteLine("---------------------| LISTA DE CLIENTES |-----------------------");
-    foreach (Cliente c in TodosClientes)
-    {
-        Console.WriteLine(c);
-        Console.WriteLine("-----------------------------------------------------------------");
-    }
-}
-catch(Exception ex)
-{
-    Console.WriteLine(ex.Message);
-}
+*/
 /*
 try
 {
@@ -47,18 +34,45 @@ catch(Exception ex)
 
 
 
-*/
-//clienteController.AtualizarTelefoneCliente("16998674563", "jsilva123@email.com");
 
-//Console.WriteLine(clienteController.BuscarClientePorEmail("jsilva123@email.com"));
+clienteController.AtualizarTelefoneCliente("16998674563", "jsilva123@email.com");
 
-/*
-  try{
-clienteController.DeletarCliente("jbieber123@email.com");
+Console.WriteLine(clienteController.BuscarClientePorEmail("jsilva123@email.com"));
+
+try
+{
+    clienteController.DeletarCliente("jbieber123@email.com");
 }
-catch(Exception e)
+catch (Exception e)
 {
     Console.WriteLine(e);
 }
+
 */
 
+var documentoNovo = new Documento("CPF", "7343824173438", new DateTime(2020,11,20), new DateTime(2020, 11, 30));
+
+try
+{
+    clienteController.AtualizarDocumentoCliente(documentoNovo, "jbieber123@email.com");
+}
+catch(Exception e)
+{
+    Console.WriteLine(e.Message);
+}
+
+try
+{
+    var TodosClientes = clienteController.ListarTodosClientes();
+
+    Console.WriteLine("---------------------| LISTA DE CLIENTES |-----------------------");
+    foreach (Cliente c in TodosClientes)
+    {
+        Console.WriteLine(c);
+        Console.WriteLine("-----------------------------------------------------------------");
+    }
+}
+catch (Exception ex)
+{
+    Console.WriteLine(ex.Message);
+}

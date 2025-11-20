@@ -37,29 +37,31 @@ namespace Locadora.Controller
             }
         }
 
-
-
-
-
-        public Documento BuscarDocumento()
+        public void AtualizarDocumento(Documento documento, SqlConnection connection, SqlTransaction transaction)
         {
-            return null;
+            try
+            {
+                var command = new SqlCommand(Documento.UPDATEDOCUMENTO, connection, transaction);
+
+                command.Parameters.AddWithValue("@idCliente", documento.ClienteID);
+                command.Parameters.AddWithValue("@TipoDocumento", documento.TipoDocumento);
+                command.Parameters.AddWithValue("@Numero", documento.Numero);
+                command.Parameters.AddWithValue("@DataEmissao", documento.DataEmissao);
+                command.Parameters.AddWithValue("@DataValidade", documento.DataValidade);
+
+                command.ExecuteNonQuery();
+
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Erro ao atualizar documento: " + ex.Message);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Erro inesperado ao atualizar documento: " + e.Message);
+            }
         }
 
-        public List<Documento> ListarTodosDocumentos()
-        {
-            return null;
-        }
-
-        public void AtualizarDocumento()
-        {
-
-        }
-
-        public void DeletarDocumento()
-        {
-
-        }
 
 
 

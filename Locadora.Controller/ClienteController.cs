@@ -1,5 +1,6 @@
 ﻿using Locadora.Models;
 using Microsoft.Data.SqlClient;
+using Microsoft.IdentityModel.Tokens;
 using System.Net.WebSockets;
 using Utils.Databases;
 
@@ -72,10 +73,15 @@ namespace Locadora.Controller
                                               reader["Telefone"] != DBNull.Value ?
                                               reader["Telefone"].ToString() : null);
                     cliente.SetClienteID((int)reader["ClienteID"]);
+
+                    var documento = new Documento(reader["TipoDocumento"].ToString(),
+                                                  reader["Numero"].ToString(),
+                                                  (DateTime)reader["DataEmissao"],
+                                                  (DateTime)reader["DataValidade"]);
+
+                    cliente.SetDocumento(documento);
                     return cliente;
                 }
-
-
                 return null;
             }
             catch (SqlException ex)
@@ -175,6 +181,39 @@ namespace Locadora.Controller
             finally
             {
                 connection.Close();
+            }
+        }
+
+        public void AtualizarDocumentoCliente(Documento documento,string email)
+        {
+            var clienteEncontrado = BuscarClientePorEmail(email) ??
+                throw new Exception("Cliente não encontrado");
+
+            using (SqlConnection connection = new SqlConnection(ConnectionDB.GetConnectionString()))
+            {
+                connection.Open();
+
+                using(SqlTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        documento.SetClienteID(clienteEncontrado.ClienteID);
+                        DocumentoController documentoController = new DocumentoController();
+
+                        documentoController.AtualizarDocumento(documento,connection,transaction);
+                        transaction.Commit();
+
+                    }catch(SqlException ex)
+                    {
+                        transaction.Rollback();
+                        throw new Exception("Erro ao atualizar documento do cliente: " + ex.Message);
+                    }
+                    catch(Exception e)
+                    {
+                        transaction.Rollback();
+                        throw new Exception("Erro inesperado ao atualizar documento do cliente: " + e.Message);
+                    }
+                }
             }
         }
 
