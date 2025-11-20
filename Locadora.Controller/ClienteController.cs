@@ -7,7 +7,7 @@ namespace Locadora.Controller
 {
     public class ClienteController
     {
-        public void AdicionarCliente(Cliente cliente)
+        public void AdicionarCliente(Cliente cliente, Documento documento)
         {
             var connection = new SqlConnection(ConnectionDB.GetConnectionString());
             connection.Open();
@@ -24,12 +24,24 @@ namespace Locadora.Controller
                     int clienteId = Convert.ToInt32(command.ExecuteScalar());
                     cliente.SetClienteID(clienteId);
 
+                    
+                    var documentoController = new DocumentoController();
+                    documento.SetClienteID(clienteId);
+
+                    documentoController.AdicionarDocumento(documento,connection,transaction);
+
                     transaction.Commit();
                 }
                 catch (SqlException ex)
                 {
-
                     transaction.Rollback();
+                    throw new Exception("Erro ao adicionar cliente: " + ex.Message);
+
+                }
+                catch(Exception e)
+                {
+                    transaction.Rollback();
+                    throw new Exception("Erro inesperado ao adicionar cliente: " + e.Message);
                 }
                 finally
                 {
@@ -103,7 +115,13 @@ namespace Locadora.Controller
                         reader["Telefone"] != DBNull.Value ?
                         reader["Telefone"].ToString() : null);
 
-                    cliente.SetClienteID((int)reader["ClienteID"]);
+
+                    var documento = new Documento(reader["TipoDocumento"].ToString(),
+                                                  reader["Numero"].ToString(),
+                                                  (DateTime)reader["DataEmissao"],
+                                                  (DateTime)reader["DataValidade"]);
+
+                    cliente.SetDocumento(documento);
 
                     clientes.Add(cliente);
                 }
@@ -174,7 +192,7 @@ namespace Locadora.Controller
                 connection.Open();
                 try
                 {
-                    SqlCommand command = new SqlCommand(Cliente.DELETECLIENTE,connection);
+                    SqlCommand command = new SqlCommand(Cliente.DELETECLIENTEPOREMAIL,connection);
                     command.Parameters.AddWithValue("@idCliente", clienteEncontrado.ClienteID);
                     command.ExecuteNonQuery();
 

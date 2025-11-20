@@ -8,7 +8,8 @@ namespace Locadora.Models
 {
     public class Documento
     {
-        public readonly static string INSERTDOCUMENTO = "INSERT INTO tblDocumentos VALUES (@ClienteID,@TipoDocumento,@Numero,@DataEmissao,@DataValidade);";
+        public readonly static string INSERTDOCUMENTO = "INSERT INTO tblDocumentos(ClienteID,TipoDocumento,Numero,DataEmissao,DataValidade) " +
+                                                                     "VALUES (@ClienteID,@TipoDocumento,@Numero,@DataEmissao,@DataValidade);";
 
         public int DoumentoID { get; private set; }
 
@@ -22,13 +23,17 @@ namespace Locadora.Models
 
         public DateTime DataValidade { get; private set; }
 
-        public Documento(int clienteID, string tipoDocumento, string numero, DateTime dataEmissao, DateTime dataValidade)
+        public Documento(string tipoDocumento, string numero, DateTime dataEmissao, DateTime dataValidade)
         {
-            this.ClienteID = clienteID;
             this.TipoDocumento = tipoDocumento;
             this.Numero = numero;
             this.DataEmissao = dataEmissao;
             this.DataValidade = dataValidade;
+        }
+
+        public void SetClienteID(int clienteID)
+        {
+            this.ClienteID = clienteID;
         }
 
         public override string ToString()
