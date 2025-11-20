@@ -159,5 +159,38 @@ namespace Locadora.Controller
                 connection.Close();
             }
         }
+
+        public void DeletarCliente(string email)
+        {
+            var clienteEncontrado = this.BuscarClientePorEmail(email);
+
+            if (clienteEncontrado is null)
+            {
+                throw new Exception("Cliente não encontrado.");
+            }
+
+            using (SqlConnection connection = new SqlConnection(ConnectionDB.GetConnectionString()))
+            {
+                connection.Open();
+                try
+                {
+                    SqlCommand command = new SqlCommand(Cliente.DELETECLIENTE,connection);
+                    command.Parameters.AddWithValue("@idCliente", clienteEncontrado.ClienteID);
+                    command.ExecuteNonQuery();
+
+                }
+                catch (SqlException ex)
+                {
+                    throw new Exception("Erro ao deletar cliente: " + ex.Message);
+
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("Erro inesperado ao deletar o cliente: " + e.Message);
+
+                }
+            }
+                
+        }
     }
 }
