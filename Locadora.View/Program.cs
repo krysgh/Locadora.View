@@ -25,6 +25,11 @@ var veiculoController = new VeiculoController();
 
 var categoria = new Categoria("NovaCategoria", "Essa é uma nova categoria", Convert.ToDecimal(130));
 
+FuncionarioController funcionarioController = new FuncionarioController();
+
+Funcionario funcionario = new("Wayne","12312312312","wjunior123@email.com");
+
+
 /*
 try
 {
@@ -94,10 +99,10 @@ catch (Exception ex)
 {
     Console.WriteLine(ex.Message);
 }
-*/
+
 try
 {
-    veiculoController.AtualizarVeiculo(EStatusVeiculo.Alugado.ToString(), "MNO7890");
+    funcionarioController.AdicionarFuncionario(funcionario);
 }
 
 catch (Exception ex)
@@ -111,6 +116,31 @@ try
     foreach (Veiculo v in veiculoController.ListarTodosVeiculos())
     {
         Console.WriteLine(v);
+        Console.WriteLine("-----------------------------------------------------------------");
+    }
+}
+catch (Exception ex)
+{
+    Console.WriteLine(ex.Message);
+}
+*/
+
+try
+{
+    funcionarioController.DeletarFuncionarioPorCPF("12312312312");
+   
+}
+catch (Exception ex)
+{
+    Console.WriteLine(ex.Message);
+}
+
+try
+{
+    Console.WriteLine("--------------------| LISTA DE FUNCIONARIOS |----------------------");
+    foreach (Funcionario f in funcionarioController.ListarTodosFuncionarios())
+    {
+        Console.WriteLine(f);
         Console.WriteLine("-----------------------------------------------------------------");
     }
 }
