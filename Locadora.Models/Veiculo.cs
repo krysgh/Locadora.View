@@ -8,6 +8,25 @@ namespace Locadora.Models
 {
     public class Veiculo
     {
+        public readonly static string INSERTVEICULO = @"INSERT INTO tblVeiculos (CategoriaID, Placa, Marca, Modelo, Ano, StatusVeiculo)
+                                                        VALUES (@CategoriaID, @Placa, @Marca, @Modelo, @Ano, @StatusVeiculo)";
+
+        public readonly static string SELECVEICULOPORPLACA = @"SELECT VeiculoID,CategoriaID,Placa, Marca, Modelo, Ano, StatusVeiculo
+                                                               FROM tblVeiculos
+                                                               WHERE Placa = @Placa";
+
+        public readonly static string SELECTALLVEICULOS = @"SELECT CategoriaID,Placa, Marca, Modelo, Ano, StatusVeiculo
+                                                            FROM tblVeiculos";
+
+        public readonly static string UPDATESTATUSVEICULO = @"UPDATE tblVeiculos 
+                                                              SET StatusVeiculo = @StatusVeiculo
+                                                              WHERE VeiculoID = @idVeiculo";
+
+        public readonly static string DELETEVEICULO = @"DELETE FROM tblVeiculos
+                                                        WHERE VeiculoID = @idVeiculo;";
+
+        
+
         public int VeiculoID { get; private set; }
 
         public int CategoriaID { get; private set; }
@@ -45,9 +64,9 @@ namespace Locadora.Models
         public override string ToString()
         {
             return $"Placa: {this.Placa}\n" +
-                   $"Marca: {this.Marca}" +
-                   $"Modelo: {this.Modelo}" +
-                   $"Ano: {this.Ano}" +
+                   $"Marca: {this.Marca}\n" +
+                   $"Modelo: {this.Modelo}\n" +
+                   $"Ano: {this.Ano}\n" +
                    $"Status: {this.StatusVeiculo}";
         }
 
