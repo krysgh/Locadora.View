@@ -59,11 +59,56 @@ namespace Locadora.Controller
             {
                 connection.Open();
 
-                using (SqlCommand command = new SqlCommand(Veiculo.SELECVEICULOPORPLACA, connection))
+                using (SqlCommand command = new SqlCommand(Veiculo.SELECTVEICULOPORPLACA, connection))
                 {
                     try
                     {
                         command.Parameters.AddWithValue("@Placa", placa);
+
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                Veiculo veiculo = new Veiculo(
+                                                              reader.GetInt32(1),
+                                                              reader.GetString(2),
+                                                              reader.GetString(3),
+                                                              reader.GetString(4),
+                                                              reader.GetInt32(5),
+                                                              reader.GetString(6)
+                                                             );
+                                veiculo.SetVeiculoID(reader.GetInt32(0));
+
+                                return veiculo;
+                            }
+                            return null;
+                        }
+                    }
+                    catch (SqlException ex)
+                    {
+                        throw new Exception("Erro ao listar veículos: " + ex.Message);
+                    }
+                    catch (Exception e)
+                    {
+                        throw new Exception("Erro inesperado ao listar veículos: " + e.Message);
+                    }
+
+                }
+            }
+        }
+
+        public Veiculo BuscarVeiculoPorID(int id)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionDB.GetConnectionString()))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(Veiculo.SELECTVEICULOPORID, connection))
+                {
+                    try
+                    {
+                        command.Parameters.AddWithValue("@idVeiculo", id);
 
 
                         using (SqlDataReader reader = command.ExecuteReader())

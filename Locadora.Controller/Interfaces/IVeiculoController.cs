@@ -13,6 +13,8 @@ namespace Locadora.Controller.Interfaces
 
         public Veiculo BuscarVeiculoPorPlaca(string placa);
 
+        public Veiculo BuscarVeiculoPorID(int id);
+
         public List<Veiculo> ListarTodosVeiculos();
 
         public void AtualizarVeiculo(string statusVeiculo,string placa);

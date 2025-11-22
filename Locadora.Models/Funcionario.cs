@@ -23,7 +23,7 @@ namespace Locadora.Models
                                                                   WHERE FuncionarioID = @idFuncionario;";
 
         public readonly static string DELETEFUNCIONARIOPORCPF = @"DELETE FROM tblFuncionarios
-                                                                  WHERE FuncionarioID = @idFuncionario;";
+                                                                  WHERE FuncionarioID = @idFuncionario; ";
 
         public int FuncionarioID {  get; private set; }
 

@@ -98,6 +98,52 @@ namespace Locadora.Controller
             }
         }
 
+        public Cliente BuscarClientePorID(int id)
+        {
+            SqlConnection connection = new SqlConnection(ConnectionDB.GetConnectionString());
+            connection.Open();
+
+            try
+            {
+
+                SqlCommand command = new SqlCommand(Cliente.SELECTCLIENTEPORID, connection);
+                command.Parameters.AddWithValue("@idCliente", id);
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+
+                    var cliente = new Cliente(reader["Nome"].ToString(),
+                                              reader["Email"].ToString(),
+                                              reader["Telefone"] != DBNull.Value ?
+                                              reader["Telefone"].ToString() : null);
+                    cliente.SetClienteID((int)reader["ClienteID"]);
+
+                    var documento = new Documento(reader["TipoDocumento"].ToString(),
+                                                  reader["Numero"].ToString(),
+                                                  (DateTime)reader["DataEmissao"],
+                                                  (DateTime)reader["DataValidade"]);
+
+                    cliente.SetDocumento(documento);
+                    return cliente;
+                }
+                return null;
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Erro ao buscar cliente:" + ex.Message);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Erro inesperado ao buscar cliente:" + e.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
 
         public List<Cliente> ListarTodosClientes()
         {

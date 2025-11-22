@@ -29,122 +29,50 @@ FuncionarioController funcionarioController = new FuncionarioController();
 
 Funcionario funcionario = new("Wayne","12312312312","wjunior123@email.com");
 
+LocacaoController locacaoController = new LocacaoController();
 
+Locacao locacao = new(1, 1, 300m, 12);
 /*
 try
 {
-    var TodasCategorias = categoriaController.ListarTodasCategorias();
-    Console.WriteLine("--------------------| LISTA DE CATEGORIAS |----------------------");
-    foreach (Categoria c in TodasCategorias)
+    locacaoController.AdicionarLocacao(locacao);
+}
+catch(Exception ex)
+{
+    Console.WriteLine(ex);
+}
+
+
+try
+{
+    Console.WriteLine(locacaoController.BuscarLocacaoPorId(1));
+}
+catch (Exception ex)
+{
+    Console.WriteLine(ex);
+}
+
+try
+{
+    var funcaionarios = locacaoController.ListarFuncionariosDeUmaLocacao(1002);
+
+    foreach(var funcaionario in funcaionarios)
     {
-        Console.WriteLine(c);
-        Console.WriteLine("-----------------------------------------------------------------");
+        Console.WriteLine(funcaionario);
     }
 }
 catch (Exception ex)
 {
-    Console.WriteLine(ex.Message);
-}
-
-var veiculo = new Veiculo(1, "XYZ-9876", "Chevrolet", "S10", 2025, EStatusVeiculo.Disponivel.ToString());
-
-
-
-
-try
-{
-
-    Console.WriteLine("--------------------| LISTA DE VEICULOS |----------------------");
-    foreach (Veiculo v in veiculoController.ListarTodosVeiculos())
-    {
-        Console.WriteLine(v);
-        Console.WriteLine("-----------------------------------------------------------------");
-    }
-}
-catch (Exception ex)
-{
-    Console.WriteLine(ex.Message);
-}
-
-var categoriaNova = new Categoria("Loucos", Convert.ToDecimal(300));
-try
-{
-    categoriaController.AtualizarCategoriaPorID(1004, categoriaNova);
-}
-catch (Exception e)
-{
-    Console.WriteLine("Erro: " + e.Message);
-}
-
-try
-{
-    var TodasCategorias = categoriaController.ListarTodasCategorias();
-    Console.WriteLine("--------------------| LISTA DE CATEGORIAS |----------------------");
-    foreach (Categoria c in TodasCategorias)
-    {
-        Console.WriteLine(c);
-        Console.WriteLine("-----------------------------------------------------------------");
-    }
-}
-catch (Exception ex)
-{
-    Console.WriteLine(ex.Message);
-}
-
-try {
-    Console.WriteLine(veiculoController.BuscarVeiculoPorPlaca("XYZ-9876"));
-}
-
-catch (Exception ex)
-{
-    Console.WriteLine(ex.Message);
-}
-
-try
-{
-    funcionarioController.AdicionarFuncionario(funcionario);
-}
-
-catch (Exception ex)
-{
-    Console.WriteLine(ex.Message);
-}
-try
-{
-
-    Console.WriteLine("--------------------| LISTA DE VEICULOS |----------------------");
-    foreach (Veiculo v in veiculoController.ListarTodosVeiculos())
-    {
-        Console.WriteLine(v);
-        Console.WriteLine("-----------------------------------------------------------------");
-    }
-}
-catch (Exception ex)
-{
-    Console.WriteLine(ex.Message);
+    Console.WriteLine(ex);
 }
 */
-
 try
 {
-    funcionarioController.DeletarFuncionarioPorCPF("12312312312");
-   
+    locacaoController.FinalizarLocacao(1002);
+
+    Console.WriteLine(locacaoController.BuscarLocacaoPorId(1002));
 }
 catch (Exception ex)
 {
-    Console.WriteLine(ex.Message);
-}
-
-try
-{
-    Console.WriteLine("--------------------| LISTA DE FUNCIONARIOS |----------------------");
-    foreach (Funcionario f in funcionarioController.ListarTodosFuncionarios())
-    {
-        Console.WriteLine(f);
-        Console.WriteLine("-----------------------------------------------------------------");
-    }
-}
-catch (Exception ex)
-{
-    Console.WriteLine(ex.Message);
+    Console.WriteLine(ex);
 }

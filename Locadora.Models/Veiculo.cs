@@ -11,9 +11,13 @@ namespace Locadora.Models
         public readonly static string INSERTVEICULO = @"INSERT INTO tblVeiculos (CategoriaID, Placa, Marca, Modelo, Ano, StatusVeiculo)
                                                         VALUES (@CategoriaID, @Placa, @Marca, @Modelo, @Ano, @StatusVeiculo)";
 
-        public readonly static string SELECVEICULOPORPLACA = @"SELECT VeiculoID,CategoriaID,Placa, Marca, Modelo, Ano, StatusVeiculo
+        public readonly static string SELECTVEICULOPORPLACA = @"SELECT VeiculoID,CategoriaID,Placa, Marca, Modelo, Ano, StatusVeiculo
                                                                FROM tblVeiculos
                                                                WHERE Placa = @Placa";
+
+        public readonly static string SELECTVEICULOPORID = @"SELECT VeiculoID,CategoriaID,Placa, Marca, Modelo, Ano, StatusVeiculo
+                                                               FROM tblVeiculos
+                                                               WHERE VeiculoID = @idVeiculo";
 
         public readonly static string SELECTALLVEICULOS = @"SELECT CategoriaID,Placa, Marca, Modelo, Ano, StatusVeiculo
                                                             FROM tblVeiculos";

@@ -107,7 +107,7 @@ namespace Locadora.Controller
                             return funcionarios;
                         }
                     }
-                    return null;
+                    
                 }
                 catch (SqlException ex)
                 {
