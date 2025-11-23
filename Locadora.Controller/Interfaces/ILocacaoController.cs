@@ -6,17 +6,17 @@ namespace Locadora.Controller.Interfaces
     {
         public void AdicionarLocacao(Locacao locacao);
 
-        public void AssociarFuncionario(int idFuncionario,int idLocacao);
+        public void AssociarFuncionario(string cpf,int idLocacao);
 
         public List<Locacao> ListarLocacoesAivas();
 
         public void FinalizarLocacao(int idLocacao);
 
-        public List<Locacao> ListarLocacaoPorCliente(int id);
+        public List<Locacao> ListarLocacaoPorCliente(string email);
 
-        public List<Locacao> ListarLocacaoPorFuncionario(int id);
+        public List<Locacao> ListarLocacaoPorFuncionario(string cpf);
 
-        public List<Funcionario> ListarFuncionariosDeUmaLocacao(int id);
+        public List<Funcionario> ListarFuncionariosDeUmaLocacao(int idLocacao);
 
         public List<Locacao> ListarTodasLocacoes();
 

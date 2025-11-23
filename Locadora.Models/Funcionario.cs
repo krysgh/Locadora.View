@@ -35,6 +35,8 @@ namespace Locadora.Models
 
         public decimal? Salario { get; private set; }
 
+        public List<Locacao> LocacoesGerenciadas { get; private set; }
+
         public Funcionario(string nome, string cPF, string email)
         {
             this.Nome = nome;
@@ -45,6 +47,11 @@ namespace Locadora.Models
         public Funcionario(string nome,string cPF,string email,decimal? salario) : this(nome, cPF, email)
         {
             this.Salario = salario;
+        }
+
+        public void SetLocacoes(Locacao locacao)
+        {
+            this.LocacoesGerenciadas.Add(locacao);
         }
 
         public void SetFuncionarioID(int id)

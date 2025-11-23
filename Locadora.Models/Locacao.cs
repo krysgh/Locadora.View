@@ -14,43 +14,46 @@ namespace Locadora.Models
                                                              LEFT JOIN tblFuncionarios f ON f.FuncionarioID = lf.FuncionarioID
                                                              WHERE l.LocacaoID = @idLocacao;";
 
-        public readonly static string SELECTLOCACAOPORCLIENTE = @"SELECT c.Nome,c.Email,
-	                                                                     v.Modelo,v.Placa,
-	                                                                     l.DataLocacao,l.DataDevolucaoPrevista,l.DataDevolucaoReal,l.ValorDiaria,l.ValorTotal,l.Multa,l.Status
+        public readonly static string SELECTLOCACAOPORCLIENTE = @"SELECT l.LocacaoID,l.ClienteID, l.VeiculoID, l.DataLocacao,l.DataDevolucaoPrevista,l.DataDevolucaoReal,l.ValorDiaria,l.ValorTotal,l.Multa,l.Status,
+                                                                       f.CPF
                                                                   FROM tblLocacoes l
                                                                   JOIN tblClientes c ON l.ClienteID = c.ClienteID
                                                                   JOIN tblVeiculos v ON l.VeiculoID = v.VeiculoID
-                                                                  WHERE ClienteID = @idCliente;";
+                                                                  LEFT JOIN tblLocacaoFuncionarios lf ON lf.LocacaoID = l.LocacaoID
+                                                                  LEFT JOIN tblFuncionarios f ON f.FuncionarioID = lf.FuncionarioID
+                                                                  WHERE c.ClienteID = @idCliente;";
 
-        public readonly static string SELECTLOCACAOPORFUNCIONARIO = @"SELECT c.Nome,c.Email,
-	                                                                         v.Modelo,v.Placa,
-	                                                                         l.DataLocacao,l.DataDevolucaoPrevista,l.DataDevolucaoReal,l.ValorDiaria,l.ValorTotal,l.Multa,l.Status
-                                                                      FROM tblLocacoes l
-                                                                      JOIN tblClientes c ON l.ClienteID = c.ClienteID
-                                                                      JOIN tblVeiculos v ON l.VeiculoID = v.VeiculoID
-                                                                      WHERE FuncionarioID = @idFuncionario;";
-
-        public readonly static string SELECTLOCACAOPORVEICULO = @"SELECT c.Nome,c.Email,
-	                                                                     v.Modelo,v.Placa,
-	                                                                     l.DataLocacao,l.DataDevolucaoPrevista,l.DataDevolucaoReal,l.ValorDiaria,l.ValorTotal,l.Multa,l.Status
+        public readonly static string SELECTLOCACAOPORFUNCIONARIO = @"SELECT l.LocacaoID,l.ClienteID, l.VeiculoID, l.DataLocacao,l.DataDevolucaoPrevista,l.DataDevolucaoReal,l.ValorDiaria,l.ValorTotal,l.Multa,l.Status,
+                                                                       f.CPF
                                                                   FROM tblLocacoes l
                                                                   JOIN tblClientes c ON l.ClienteID = c.ClienteID
                                                                   JOIN tblVeiculos v ON l.VeiculoID = v.VeiculoID
-                                                                  WHERE VeiculoID = @idVeiculo;";
+                                                                  LEFT JOIN tblLocacaoFuncionarios lf ON lf.LocacaoID = l.LocacaoID
+                                                                  LEFT JOIN tblFuncionarios f ON f.FuncionarioID = lf.FuncionarioID
+                                                                  WHERE f.FuncionarioID = @idFuncionario;";
 
         public readonly static string SELECTFUNCIONARIOSDEUMALOCACAO = @"SELECT f.FuncionarioID,f.Nome,f.CPF,f.Email,f.Salario
                                                                          FROM tblFuncionarios f
                                                                          JOIN tblLocacaoFuncionarios lf ON lf.FuncionarioID = f.FuncionarioID
                                                                          WHERE lf.LocacaoID = @idLocacao;";
 
+        public readonly static string SELECTLOCAOESATIVAS = @"SELECT l.LocacaoID,l.ClienteID, l.VeiculoID, l.DataLocacao,l.DataDevolucaoPrevista,l.DataDevolucaoReal,l.ValorDiaria,l.ValorTotal,l.Multa,l.Status,
+                                                                       f.CPF
+                                                                  FROM tblLocacoes l
+                                                                  JOIN tblClientes c ON l.ClienteID = c.ClienteID
+                                                                  JOIN tblVeiculos v ON l.VeiculoID = v.VeiculoID
+                                                                  LEFT JOIN tblLocacaoFuncionarios lf ON lf.LocacaoID = l.LocacaoID
+                                                                  LEFT JOIN tblFuncionarios f ON f.FuncionarioID = lf.FuncionarioID
+                                                                  WHERE l.Status = 'Ativa';";
 
 
-        public readonly static string SELECTTODASLOCACOES = @"SELECT c.Nome,c.Email,
-	                                                                 v.Modelo,v.Placa,
-	                                                                 l.DataLocacao,l.DataDevolucaoPrevista,l.DataDevolucaoReal,l.ValorDiaria,l.ValorTotal,l.Multa,l.Status
-                                                              FROM tblLocacoes l
-                                                              JOIN tblClientes c ON l.ClienteID = c.ClienteID
-                                                              JOIN tblVeiculos v ON l.VeiculoID = v.VeiculoID;";
+        public readonly static string SELECTTODASLOCACOES = @"SELECT l.LocacaoID,l.ClienteID, l.VeiculoID, l.DataLocacao,l.DataDevolucaoPrevista,l.DataDevolucaoReal,l.ValorDiaria,l.ValorTotal,l.Multa,l.Status,
+                                                                       f.CPF
+                                                                  FROM tblLocacoes l
+                                                                  JOIN tblClientes c ON l.ClienteID = c.ClienteID
+                                                                  JOIN tblVeiculos v ON l.VeiculoID = v.VeiculoID
+                                                                  LEFT JOIN tblLocacaoFuncionarios lf ON lf.LocacaoID = l.LocacaoID
+                                                                  LEFT JOIN tblFuncionarios f ON f.FuncionarioID = lf.FuncionarioID;";
 
         public static readonly string INSERTLOCACAOFUNCIONARIO = @"INSERT INTO tblLocacaoFuncionarios(FuncionarioID,LocacaoID)
                                                                    VALUES (@idFuncionario,@idLocacao);";
@@ -58,11 +61,12 @@ namespace Locadora.Models
         public readonly static string UPDATELOCACAOPORID = @"UPDATE tblLocacoes
                                                            SET DataDevolucaoReal = GETDATE(),
                                                                Multa = CASE
-                                                                           WHEN DATEDIFF(day, DataDevolucaoPrevista, DataDevolucaoReal) > 0 THEN
-                                                                               DATEDIFF(day, DataDevolucaoPrevista, DataDevolucaoReal) * 2 * ValorDiaria
+                                                                           WHEN DATEDIFF(day, DataDevolucaoPrevista, GETDATE()) > 0 THEN
+                                                                               DATEDIFF(day, DataDevolucaoPrevista, GETDATE()) * 2 * ValorDiaria
                                                                            ELSE
                                                                                0.00
                                                                        END,
+                                                               ValorTotal = ValorDiaria * DATEDIFF(day, DataLocacao,DataDevolucaoPrevista),
                                                                Status = 'Finalizada'
                                                            WHERE LocacaoID = @idLocacao;";
 
@@ -147,11 +151,6 @@ namespace Locadora.Models
             this.VeiculoPlaca = veiculoPlaca;
         }
 
-        public void SetDataDevolucaoReal(DateTime dataDevolucaoReal)
-        {
-            this.DataDevolucaoReal = dataDevolucaoReal;
-        }
-
         public void SetFuncionarios(List<Funcionario> funcionarios)
         {
             this.Funcionarios = funcionarios;
@@ -160,13 +159,14 @@ namespace Locadora.Models
         public override string? ToString()
         {
             var result = $"Cliente: {this.ClienteNome} => '{this.ClienteEmail}'\n" +
-                          $"Veículo: {this.VeiculoModelo} => '{this.VeiculoPlaca}'\n" +
+                          $"Veículo: {this.VeiculoModelo} => '{this.VeiculoPlaca}'\n\n" +
                           $"Data de Locação: {DateOnly.FromDateTime(this.DataLocacao)}\n" +
                           $"Data de Devolução Prevista: {DateOnly.FromDateTime(this.DataDevolucaoPrevista)}\n" +
-                          $"Data de Devolução Real: {this.DataDevolucaoReal}\n" +
+                          $"Data de Devolução Real: {this.DataDevolucaoReal}\n\n" +
                           $"Valor da Diária: {this.ValorDiaria:C}\n" +
-                          $"Valor Total: {this.ValorTotal:C}\n" +
+                          $"Valor Locação: {this.ValorTotal:C}\n" +
                           $"Multa: {this.Multa:C}\n" +
+                          $"Valor Total: {(this.ValorTotal + this.Multa):C}\n" +
                           $"Status: {this.Status}\n\n" +
                           $"Funcionários associados:\n";
                           foreach(Funcionario f in this.Funcionarios)
@@ -175,7 +175,7 @@ namespace Locadora.Models
                             result += $"'{f.Email}'\n";
                           }
                           if (this.Funcionarios.Count == 0)
-                              result += "Nenhum funcionário associado.";
+                              result += "   Nenhum funcionário associado.\n";
                           return result;
 
         }

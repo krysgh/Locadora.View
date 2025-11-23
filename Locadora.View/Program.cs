@@ -1,8 +1,6 @@
 ﻿using Locadora.Controller;
 using Locadora.Models;
-using Locadora.Models.Enums;
-using Microsoft.Data.SqlClient;
-using Utils.Databases;
+using Locadora.View.Menus;
 
 #region ClienteDocumentoObjetos
 //Primeiro teste inserindo cliente e documento e printando
@@ -65,14 +63,23 @@ catch (Exception ex)
 {
     Console.WriteLine(ex);
 }
-*/
+
 try
 {
-    locacaoController.FinalizarLocacao(1002);
+    locacaoController.FinalizarLocacao(2);
+    var locacao1 = locacaoController.ListarLocacaoPorFuncionario("777.888.999-00");
 
-    Console.WriteLine(locacaoController.BuscarLocacaoPorId(1002));
+    Console.WriteLine("-------------| LISTA DE LOCAÇÕES |-----------------\n");
+    foreach(Locacao l in locacao1)
+    {
+        Console.WriteLine(l);
+        Console.WriteLine("---------------------------------------------------");
+    }
 }
 catch (Exception ex)
 {
     Console.WriteLine(ex);
 }
+*/
+MenuPrincipal menuPrincipal = new MenuPrincipal();
+menuPrincipal.Run();
