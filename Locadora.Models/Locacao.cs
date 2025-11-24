@@ -4,7 +4,7 @@ namespace Locadora.Models
 {
     public class Locacao
     {
-        public readonly static string INSERTLOCACAO= @"INSERT INTO tblLocacoes (ClienteID, VeiculoID, DataLocacao,DataDevolucaoReal,DataDevolucaoPrevista,ValorDiaria,ValorTotal,Multa,Status)
+        public readonly static string INSERTLOCACAO = @"INSERT INTO tblLocacoes (ClienteID, VeiculoID, DataLocacao,DataDevolucaoReal,DataDevolucaoPrevista,ValorDiaria,ValorTotal,Multa,Status)
                                                        VALUES (@idCliente,@idVeiculo,@DataLocacao,@DataDevolucaoReal,@DataDevolucaoPrevista,@ValorDiaria,@ValorTotal,@Multa,@Status);";
 
         public readonly static string SELECTLOCACAOPORID = @"SELECT l.LocacaoID,l.ClienteID, l.VeiculoID, l.DataLocacao,l.DataDevolucaoReal,l.DataDevolucaoPrevista,l.ValorDiaria,l.ValorTotal,l.Multa,l.Status,
@@ -53,7 +53,8 @@ namespace Locadora.Models
                                                                   JOIN tblClientes c ON l.ClienteID = c.ClienteID
                                                                   JOIN tblVeiculos v ON l.VeiculoID = v.VeiculoID
                                                                   LEFT JOIN tblLocacaoFuncionarios lf ON lf.LocacaoID = l.LocacaoID
-                                                                  LEFT JOIN tblFuncionarios f ON f.FuncionarioID = lf.FuncionarioID;";
+                                                                  LEFT JOIN tblFuncionarios f ON f.FuncionarioID = lf.FuncionarioID
+                                                                  ORDER BY l.DataLocacao DESC;";
 
         public static readonly string INSERTLOCACAOFUNCIONARIO = @"INSERT INTO tblLocacaoFuncionarios(FuncionarioID,LocacaoID)
                                                                    VALUES (@idFuncionario,@idLocacao);";

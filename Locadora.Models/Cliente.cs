@@ -26,7 +26,8 @@ namespace Locadora.Models
                                                               JOIN tblDocumentos d ON c.ClienteID = d.ClienteID
                                                               WHERE c.ClienteID = @idCliente;";
 
-        public readonly static string DELETECLIENTEPOREMAIL = "DELETE FROM tblClientes WHERE ClienteID = @idCliente;";
+        public readonly static string DELETECLIENTEPOREMAIL = @"DELETE FROM tblDocumentos WHERE ClienteID = @idCliente;
+                                                                DELETE FROM tblClientes WHERE ClienteID = @idCliente;";
     
         public int ClienteID { get; private set; }
 

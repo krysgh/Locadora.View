@@ -38,8 +38,6 @@ namespace Locadora.Models
 
         public decimal Diaria {get;private set;}
 
-        public decimal DiariaAte {get;private set;}
-
         public Categoria(string nome, decimal diaria)
         {
             this.Nome = nome;

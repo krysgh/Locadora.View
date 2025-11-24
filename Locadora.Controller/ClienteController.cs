@@ -8,6 +8,7 @@ namespace Locadora.Controller
 {
     public class ClienteController
     {
+        private DocumentoController documentoController = new DocumentoController();
         public void AdicionarCliente(Cliente cliente, Documento documento)
         {
             var connection = new SqlConnection(ConnectionDB.GetConnectionString());
@@ -199,12 +200,7 @@ namespace Locadora.Controller
 
         public void AtualizarTelefoneCliente(string telefone, string email)
         {
-            var clienteEncontrado = this.BuscarClientePorEmail(email);
-
-            if (clienteEncontrado is null)
-            {
-                throw new Exception("Cliente não encontrado.");
-            }
+            var clienteEncontrado = this.BuscarClientePorEmail(email) ?? throw new Exception("Cliente não encontrado.");
 
             SqlConnection connection = new SqlConnection(ConnectionDB.GetConnectionString());
             connection.Open();
@@ -233,7 +229,7 @@ namespace Locadora.Controller
         public void AtualizarDocumentoCliente(Documento documento,string email)
         {
             var clienteEncontrado = BuscarClientePorEmail(email) ??
-                throw new Exception("Cliente não encontrado");
+                throw new Exception("Cliente não encontrado.");
 
             using (SqlConnection connection = new SqlConnection(ConnectionDB.GetConnectionString()))
             {

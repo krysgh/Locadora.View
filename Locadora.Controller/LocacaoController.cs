@@ -21,9 +21,11 @@ namespace Locadora.Controller
 
         public FuncionarioController funcionarioController = new();
 
-        //ARRUMAR A ENTRADA DE VEÍCULOS DUPLICADOS
         public void AdicionarLocacao(Locacao locacao)
         {
+            var clienteEncontrado = clienteController.BuscarClientePorID(locacao.ClienteID) ?? throw new Exception("Cliente não encontrado.");
+            var veiculoEncontrado = veiculoController.BuscarVeiculoPorID(locacao.VeiculoID) ?? throw new Exception("Veículo não encontrado.");
+
             if (locacao.Status.ToString() != "Ativa")
                 throw new Exception("Locação já está finalizada.");
 
@@ -176,7 +178,7 @@ namespace Locadora.Controller
         public void AssociarFuncionario(string cpf, int idLocacao)
         {
             var funcionarioEncontrado = funcionarioController.BuscarFuncionarioPorCPF(cpf) ?? throw new Exception("Funcionário não encontrado.");
-            var locacaoEncontrada = BuscarLocacaoPorId(idLocacao) ?? throw new Exception("Locação não encontrada");
+            var locacaoEncontrada = BuscarLocacaoPorId(idLocacao) ?? throw new Exception("Locação não encontrada.");
 
             using (SqlConnection connection = new SqlConnection(ConnectionDB.GetConnectionString()))
             {
@@ -190,7 +192,7 @@ namespace Locadora.Controller
                         using (SqlCommand command = new SqlCommand(Locacao.INSERTLOCACAOFUNCIONARIO, connection, transaction))
                         {
                             command.Parameters.AddWithValue("@idLocacao", idLocacao);
-                            command.Parameters.AddWithValue("@idFuncionario", funcionarioEncontrado);
+                            command.Parameters.AddWithValue("@idFuncionario", funcionarioEncontrado.FuncionarioID);
                             command.ExecuteNonQuery();
                             transaction.Commit();
                         }

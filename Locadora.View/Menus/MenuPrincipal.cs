@@ -15,12 +15,13 @@ namespace Locadora.View.Menus
 
         public void Run()
         {
+            Console.Clear();
             int opcao;
             do
             {
                 Console.WriteLine("-----| SISTEMA DE LOCADORA DE VEÍCULOS |-----");
                 Console.WriteLine("1. GERENCIAR CLIENTES");
-                Console.WriteLine("2. GERENCIAR GERENCIAR CATEGORIAS E VEÍCULOS");
+                Console.WriteLine("2. GERENCIAR CATEGORIAS E VEÍCULOS");
                 Console.WriteLine("3. GERENCIAR FUNCIONÁRIOS");
                 Console.WriteLine("4. GERENCIAR LOCAÇÕES");
                 Console.WriteLine("5. SAIR\n");
