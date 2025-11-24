@@ -94,6 +94,8 @@ namespace Locadora.Models
 
         public decimal ValorDiaria { get; private set; }
 
+        public int DiasParaRetornar { get; private set; }
+
         public decimal ValorTotal { get; private set; }
 
         public decimal Multa { get; private set; }
@@ -102,13 +104,12 @@ namespace Locadora.Models
 
         public List<Funcionario> Funcionarios { get; private set; }
 
-        public Locacao(int clienteID, int veiculoID, decimal valorDiaria, int diasParaRetornar)
+        public Locacao(int clienteID, int veiculoID, int diasParaRetornar)
         {
             this.ClienteID = clienteID;
             this.VeiculoID = veiculoID;
-            this.DataLocacao = DateTime.UtcNow;
-            this.ValorDiaria = valorDiaria;
-            this.ValorTotal = valorDiaria * diasParaRetornar;
+            this.DataLocacao = DateTime.Now;
+            this.DiasParaRetornar = diasParaRetornar;
             this.Multa = 0;
             this.DataDevolucaoPrevista = DateTime.Now.AddDays(diasParaRetornar);
             this.DataDevolucaoReal = null;

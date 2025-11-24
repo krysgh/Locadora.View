@@ -14,6 +14,9 @@ namespace Locadora.Controller
 {
     public class VeiculoController : IVeiculoController
     {
+
+        private CategoriaController categoriaController = new();
+
         public void AdicionarVeiculo(Veiculo veiculo)
         {
             using (SqlConnection connection = new SqlConnection(ConnectionDB.GetConnectionString()))
@@ -35,7 +38,6 @@ namespace Locadora.Controller
                         command.Parameters.AddWithValue("@StatusVeiculo", veiculo.StatusVeiculo);
 
                         command.ExecuteNonQuery();
-
                         transaction.Commit();
                         
                     }
@@ -124,7 +126,8 @@ namespace Locadora.Controller
                                                               reader.GetString(6)
                                                              );
                                 veiculo.SetVeiculoID(reader.GetInt32(0));
-
+                                categoriaController.BuscarCategoriaPorID(veiculo.CategoriaID).SetVeiculos(veiculo);
+                                veiculo.SetCategoria(categoriaController.BuscarCategoriaPorID(veiculo.CategoriaID));
                                 return veiculo;
                             }
                             return null;
@@ -167,6 +170,7 @@ namespace Locadora.Controller
                                                               reader.GetInt32(4),
                                                               reader.GetString(5)
                                                              );
+                                veiculo.SetCategoria(categoriaController.BuscarCategoriaPorID(veiculo.CategoriaID));
                                 veiculos.Add(veiculo);
 
                             }

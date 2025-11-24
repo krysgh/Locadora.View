@@ -38,6 +38,8 @@ namespace Locadora.Models
 
         public decimal Diaria {get;private set;}
 
+        public List<Veiculo> Veiculos { get;private set; }
+
         public Categoria(string nome, decimal diaria)
         {
             this.Nome = nome;
@@ -52,6 +54,11 @@ namespace Locadora.Models
         public void SetCategoriaID(int id)
         {
             this.CategoriaID = id;
+        }
+
+        public void SetVeiculos(Veiculo veiculo)
+        {
+            this.Veiculos.Add(veiculo);
         }
 
         public override string ToString()

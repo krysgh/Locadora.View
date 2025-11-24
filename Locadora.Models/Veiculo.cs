@@ -45,6 +45,8 @@ namespace Locadora.Models
 
         public string StatusVeiculo { get; private set; }
 
+        public Categoria Categoria { get; private set; }
+
         public Veiculo(int categoriaID, string placa, string marca, string modelo, int ano, string statusVeiculo)
         {
             this.CategoriaID = categoriaID;
@@ -65,13 +67,21 @@ namespace Locadora.Models
             this.StatusVeiculo = status;
         }
 
+        public void SetCategoria(Categoria categoria)
+        {
+            this.Categoria = categoria;
+        }
+        
+
         public override string ToString()
         {
             return $"Placa: {this.Placa}\n" +
                    $"Marca: {this.Marca}\n" +
                    $"Modelo: {this.Modelo}\n" +
                    $"Ano: {this.Ano}\n" +
-                   $"Status: {this.StatusVeiculo}";
+                   $"Status: {this.StatusVeiculo}\n" +
+                   $"Categoria:  {this.Categoria.Nome}";
+                    
         }
 
     }

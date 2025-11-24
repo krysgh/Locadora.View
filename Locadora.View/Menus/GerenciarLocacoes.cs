@@ -41,16 +41,16 @@ namespace Locadora.View.Menus
                                 if (int.TryParse(Console.ReadLine(), out int idVeiculo))
                                 {
 
-                                    Console.Write("Digite o valor da diária: ");
-                                    if (Double.TryParse(Console.ReadLine(), out double valorDiaria))
-                                    {
+                                    //Console.Write("Digite o valor da diária: ");
+                                    //if (Double.TryParse(Console.ReadLine(), out double valorDiaria))
+                                    //{
 
                                         Console.Write("Digite o número de dias para finalizar a locação: ");
                                         if (int.TryParse(Console.ReadLine(), out int diasParaFinalizar))
                                         {
                                             try
                                             {
-                                                locacaoController.AdicionarLocacao(new Locacao(idCliente, idVeiculo, (Decimal)valorDiaria, diasParaFinalizar));
+                                                locacaoController.AdicionarLocacao(new Locacao(idCliente, idVeiculo, diasParaFinalizar));
                                                 PositiveMessage("LOCAÇÃO CADASTRADA COM SUCESSO!");
                                             }
                                             catch (Exception e)
@@ -62,11 +62,11 @@ namespace Locadora.View.Menus
                                         {
                                             ErrorMessage("DIGITE O NÚMERO DE DIAS PARA FINALIZAR A LOCAÇÃO CORRETAMENTE!");
                                         }
-                                    }
-                                    else
-                                    {
-                                        ErrorMessage("DIGITE O VALOR DA DIÁRIA CORRETAMENTE!");
-                                    }
+                                    //}
+                                    //else
+                                    //{
+                                    //    ErrorMessage("DIGITE O VALOR DA DIÁRIA CORRETAMENTE!");
+                                    //}
                                 }
                                 else
                                 {
